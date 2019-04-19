@@ -1,6 +1,7 @@
 package code;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class PageRank {
-	public void runPageRank(HashMap<String, LinkedList<String>> network, double resetProbability, double maxError, int maxIterations, int noOfResults, String outputPath) throws Exception {		
+	public void runPageRank(HashMap<String, Double> vectorSpaceOutput, HashMap<String, LinkedList<String>> network, double resetProbability, double maxError, int maxIterations, int noOfResults, String outputPath) throws Exception {		
 		//Create and initialize the page ranks of all nodes to 1/N where N is the number of nodes in the network
 		HashMap<String, Double> curPageRanks = new HashMap<>();
 		HashMap<String, Double> prevPageRanks = new HashMap<>();
@@ -59,7 +60,7 @@ public class PageRank {
 		//Sort the page ranks and return top <noOfResults> results
 		HashMap<Double, ArrayList<String>> map = new HashMap<>();
 		ArrayList<Double> pageRanks = new ArrayList<>();
-		for(String str: curPageRanks.keySet()) {
+		for(String str: vectorSpaceOutput.keySet()) {
 			pageRanks.add(curPageRanks.get(str));
 			if(map.containsKey(curPageRanks.get(str))) {
 				map.get(curPageRanks.get(str)).add(str);
@@ -73,7 +74,8 @@ public class PageRank {
 		Collections.sort(pageRanks, Collections.reverseOrder());
 		
 		//Write the top results to output file
-		PrintWriter pw = new PrintWriter(outputPath);
+		PrintWriter pw = new PrintWriter(new FileWriter(outputPath, true));
+		pw.println("\n===========================================================================================================\n");
 		pw.println("Output of PageRank (Reset Probability = " + resetProbability +", Margin of error = " + maxError + ")");
 		pw.println("-----------------------------------------------------------------------\n");
 		pw.println("Document name\t\tPageRank");

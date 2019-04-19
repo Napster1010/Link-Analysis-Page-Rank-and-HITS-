@@ -46,19 +46,8 @@ public class LinkAnalysis{
         	e.printStackTrace();
         }
         
-        //Run page rank
-        try {
-        	System.out.println("Running PageRank....");
-            PageRank pageRank = new PageRank();
-            pageRank.runPageRank(network, resetProbability, error, maxPageRankIterations, noOfResults, outputPath);        	
-        }catch(Exception e) {
-        	System.out.println("Some error occurred while running page rank !!\n");
-        	e.printStackTrace();
-        }
-        
-
         //Input the query
-        System.out.println("\nEnter the query");
+        System.out.println("Enter the query");
         String query = sc.nextLine();
         
         //Pass the query to vector space model
@@ -69,6 +58,11 @@ public class LinkAnalysis{
             HashMap<String, Double> vectorSpaceOutput = vectorSpaceModel.vectorSpace(query, dataSetPath, noOfResults);            
             //Write the vector space output to file
             util.writeOutput(vectorSpaceOutput, outputPath);
+            
+            //Run page rank
+        	System.out.println("\nRunning PageRank....");
+            PageRank pageRank = new PageRank();
+            pageRank.runPageRank(vectorSpaceOutput, network, resetProbability, error, maxPageRankIterations, noOfResults, outputPath);        	
             
             System.out.println("Running HITS algorithm....");
             //Run HITS algorithm
